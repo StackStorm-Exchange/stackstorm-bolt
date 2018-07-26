@@ -71,7 +71,13 @@ class BoltAction(Action):
         return kwargs
 
     def resolve_credentials(self, **kwargs):
+        if not self.config.get('credentials'):
+            return kwargs
+
         cred_name = kwargs.get('credentials')
+        if not cred_name:
+            return kwargs
+
         if cred_name not in self.config['credentials']:
             raise ValueError('Unable to find credentials in config: {}'.format(cred_name))
 
