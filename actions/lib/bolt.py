@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from __future__ import print_function
-
 from st2common.runners.base_action import Action
 
 import json
@@ -9,6 +7,8 @@ import six
 import subprocess
 import sys
 
+# paramters/args that are 'metadata' and used for execution runtime
+# these should not be processed as bolt arguments or options
 SKIP_ARGS = [
     'cmd',
     'sub_command',
@@ -17,6 +17,7 @@ SKIP_ARGS = [
     'credentials',
 ]
 
+# options for login credentials
 CREDENTIALS_OPTIONS = [
     'user',
     'password',
@@ -25,6 +26,7 @@ CREDENTIALS_OPTIONS = [
     'sudo_password',
 ]
 
+# --option
 BOLT_FLAG_OPTIONS = [
     'noop',
     'verbose',
@@ -32,6 +34,7 @@ BOLT_FLAG_OPTIONS = [
     'trace',
 ]
 
+# --[no-]option
 BOLT_YES_NO_OPTIONS = [
     'host_key_check',
     'ssl',
@@ -40,6 +43,7 @@ BOLT_YES_NO_OPTIONS = [
     'color',
 ]
 
+# --option OPTION
 BOLT_OPTIONS = [
     'nodes',
     'query',
@@ -173,10 +177,11 @@ class BoltAction(Action):
 
         cmd = kwargs['cmd']
         sub_command = kwargs['sub_command']
+        # inherit from OS environment by default
         env = os.environ.copy()
+        # merge in any environment variables set as action arguments
         env.update(kwargs.get('env', {}))
         cwd = kwargs.get('cwd', None)
-
 
         args, options = self.build_args(**kwargs)
         return self.execute(cmd, sub_command, env, cwd, args, options)
