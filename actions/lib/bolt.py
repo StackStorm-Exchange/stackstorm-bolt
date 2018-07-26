@@ -133,8 +133,7 @@ class BoltAction(Action):
 
     def execute(self, cmd, sub_command, env, cwd, args, options):
         full_cmd = [cmd] + sub_command.split(' ') + args + options
-        self.logger.debug(' '.join(full_cmd))
-
+        # self.logger.debug(' '.join(full_cmd))
         process = subprocess.Popen(full_cmd,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
