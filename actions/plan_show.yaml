@@ -117,7 +117,7 @@ parameters:
   verbose:
     type: string
     description: "Display verbose logging"
-  _debug:
+  debug_:
     type: string
     description: "Display debug logging"
   trace:

@@ -6,7 +6,6 @@ from st2common.runners.base_action import Action
 import json
 import os
 import six
-from six.moves import shlex_quote
 import subprocess
 import sys
 
@@ -44,15 +43,17 @@ BOLT_OPTIONS = [
     'tmpdir',
     'format',
     'verbose',
-    '_debug',
+    'debug_',
+    'trace',
 ]
+
 
 class BoltAction(Action):
 
     def format_option(self, option):
-        # remove leading _ for debug
-        if option[0] == '_':
-            option = option[1:]
+        # remove trailing _ in debug_
+        if option[-1] == '_':
+            option = option[:-1]
         return option.replace('_', '-')
 
     def build_args(self, **kwargs):
@@ -89,6 +90,7 @@ class BoltAction(Action):
 
     def execute(self, cmd, sub_command, env, cwd, args, options):
         full_cmd = [cmd] + sub_command.split(' ') + args + options
+        self.logger.debug(' '.join(full_cmd))
 
         process = subprocess.Popen(full_cmd,
                                    stdout=subprocess.PIPE,
