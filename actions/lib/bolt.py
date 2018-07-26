@@ -25,16 +25,27 @@ CREDENTIALS_OPTIONS = [
     'sudo_password',
 ]
 
-BOLT_OPTIONS = [
-    'nodes',
-    'query',
+BOLT_FLAG_OPTIONS = [
     'noop',
-    'description',
-    'params',
-    'params_obj',
+    'verbose',
+    'debug_',
+    'trace',
+]
+
+BOLT_YES_NO_OPTIONS = [
     'host_key_check',
     'ssl',
     'ssl_verify',
+    'tty',
+    'color',
+]
+
+BOLT_OPTIONS = [
+    'nodes',
+    'query',
+    'description',
+    'params',
+    'params_obj',
     'concurrency',
     'compile_concurrency',
     'modulepath',
@@ -43,12 +54,8 @@ BOLT_OPTIONS = [
     'inventoryfile',
     'transport',
     'connect_timeout',
-    'tty',
     'tmpdir',
     'format',
-    'verbose',
-    'debug_',
-    'trace',
 ]
 
 
@@ -117,16 +124,19 @@ class BoltAction(Action):
             if v is None:
                 continue
 
-            if k in BOLT_OPTIONS:
-                k_formatted = self.format_option(k)
-                if isinstance(v, bool):
-                    if v:
-                        options.append('--{}'.format(k_formatted))
-                    else:
-                        options.append('--no-{}'.format(k_formatted))
-                else:
+            k_formatted = self.format_option(k)
+            if k in BOLT_FLAG_OPTIONS:
+                if v:
                     options.append('--{}'.format(k_formatted))
-                    options.append(v)
+
+            elif k in BOLT_YES_NO_OPTIONS:
+                if v:
+                    options.append('--{}'.format(k_formatted))
+                else:
+                    options.append('--no-{}'.format(k_formatted))
+            elif k in BOLT_OPTIONS:
+                options.append('--{}'.format(k_formatted))
+                options.append(v)
             else:
                 args.append(v)
         return args, options
