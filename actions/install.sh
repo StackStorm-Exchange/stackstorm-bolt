@@ -14,9 +14,11 @@ if [[ -n "$RHTEST" ]]; then
     echo "Unsupported CentOS/Red Hat version $RHMAJVER! Please use 6.x or 7.x!"
     exit 2
   fi
+  echo "*** Installing YUM repo ***"
   sudo rpm -Uvh "https://yum.puppet.com/puppet5/puppet5-release-el-$RHMAJVER.noarch.rpm"
+  echo "*** Installing Puppet Bolt ***"
   sudo yum -y install puppet-bolt
-  
+
 elif [[ -n "$DEBTEST" ]]; then
   TYPE="debs"
   echo "*** Detected Distro is ${DEBTEST} ***"
@@ -24,15 +26,19 @@ elif [[ -n "$DEBTEST" ]]; then
   echo "*** Detected flavor ${SUBTYPE} ***"
   if [[ "$SUBTYPE" == 'trusty' ]]; then
     # Ubuntu 14.04 trusty
+    echo "*** Installing APT repo ***"
     wget https://apt.puppet.com/puppet5-release-trusty.deb
     sudo dpkg -i puppet5-release-trusty.deb
-    sudo apt-get -y update 
+    sudo apt-get -y update
+    echo "*** Installing Puppet Bolt ***"
     sudo apt-get -y install puppet-bolt
   elif [[ "$SUBTYPE" == 'xenial' ]]; then
     # Ubuntu 16.04 trusty
+    echo "*** Installing APT repo ***"
     wget https://apt.puppet.com/puppet5-release-xenial.deb
     sudo dpkg -i puppet5-release-xenial.deb
-    sudo apt-get -y update 
+    sudo apt-get -y update
+    echo "*** Installing Puppet Bolt ***"
     sudo apt-get -y install puppet-bolt
   else
     echo "Unsupported ubuntu flavor ${SUBTYPE}. Please use 14.04 (trusty) or 16.04 (xenial) as base system!"
