@@ -13,7 +13,16 @@ SKIP_ARGS = [
     'cmd',
     'sub_command',
     'cwd',
-    'env'
+    'env',
+    'credentials',
+]
+
+CREDENTIALS_OPTIONS = [
+    'user',
+    'password',
+    'private_key',
+    'run_as',
+    'sudo_password',
 ]
 
 BOLT_OPTIONS = [
@@ -23,14 +32,9 @@ BOLT_OPTIONS = [
     'description',
     'params',
     'params_obj',
-    'user',
-    'password',
-    'private_key',
     'host_key_check',
     'ssl',
     'ssl_verify',
-    'run_as',
-    'sudo_password',
     'concurrency',
     'compile_concurrency',
     'modulepath',
@@ -49,6 +53,23 @@ BOLT_OPTIONS = [
 
 
 class BoltAction(Action):
+
+    def parse_credentials(self, **kwargs):
+        cred_name = kwargs.get('credentials')
+        if cred_name not in self.config['credentials']:
+            raise ValueError('Unable to find credentials in config: {}'.format(cred_name))
+
+        credentials = self.config['credentials'][cred_name]
+        for k, v in credentials:
+            # skip if the user explicitly set this proper on the action
+            if kwargs[k]:
+                continue
+
+            # only set the property if the value in the credential is set
+            if v is not None:
+                kwargs[k] = v
+
+        return kwargs
 
     def format_option(self, option):
         # remove trailing _ in debug_
@@ -121,6 +142,8 @@ class BoltAction(Action):
         env = os.environ.copy()
         env.update(kwargs.get('env', {}))
         cwd = kwargs.get('cwd', None)
+
+        kwargs = self.parse_credentials(**kwargs)
 
         args, options = self.build_args(**kwargs)
         return self.execute(cmd, sub_command, env, cwd, args, options)
