@@ -4,7 +4,6 @@ StackStorm integration pack for Puppet Bolt
 # TODO
 * This readme
 * Tests
-* Config (what options do we put in there?)
 * Action to install bolt
 
 

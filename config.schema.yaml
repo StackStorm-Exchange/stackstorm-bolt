@@ -64,9 +64,9 @@ trace:
   type: boolean
   description: "Display error stack traces"
 
-# map of name -> credentials object
 credentials:
   type: object
+  description: "Mapping of name to an object containing credential information"
   properties:
     user:
       type: string
