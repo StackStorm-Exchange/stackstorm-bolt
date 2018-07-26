@@ -9,4 +9,4 @@ formats:
 result:
     format: |
         Received the following from bolt task list:
-        {{ execution.result | to_yaml_string }}
+        {{ execution.result.result | to_yaml_string }}
