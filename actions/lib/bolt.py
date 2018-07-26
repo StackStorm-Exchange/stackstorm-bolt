@@ -61,7 +61,7 @@ class BoltAction(Action):
                 continue
 
             # skip if the user explicitly set this proper on the action
-            if kwargs[k]:
+            if kwargs[k] is not None:
                 continue
 
             # only set the property if the value is set in the config
@@ -84,7 +84,7 @@ class BoltAction(Action):
         credentials = self.config['credentials'][cred_name]
         for k, v in six.iteritems(credentials):
             # skip if the user explicitly set this proper on the action
-            if kwargs[k]:
+            if kwargs[k] is not None:
                 continue
 
             # only set the property if the value in the credential is set
