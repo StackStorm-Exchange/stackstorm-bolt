@@ -1,0 +1,125 @@
+---
+description: "Show details for plan"
+enabled: true
+name: plan_show
+pack: bolt
+runner_type: python-script
+entry_point: lib/bolt.py
+parameters:
+  plan:
+    type: string
+    description: "The plan to show"
+    required: true
+  ### Begin common environment
+  cwd:
+    type: string
+    description: "Current working directory where bolt will be executed"
+  env:
+    type: object
+    description: "Environment variables to override when executing bolt"
+  ### Begin common bolt options
+  cmd:
+    type: string
+    description: "Path to the bolt executable"
+    default: "/usr/local/bin/bolt"
+  sub_command:
+    type: string
+    immutable: true
+    default: "plan show"
+  nodes:
+    type: string
+    description: >
+      Identifies the nodes to target.
+      Enter a comma-separated list of node URIs or group names.
+      Or read a node list from an input file '@<file>' or stdin '-'.
+      Example: --nodes localhost,node_group,ssh://nix.com:23,winrm://windows.puppet.com
+      URI format is [protocol://]host[:port]
+      SSH is the default protocol; may be ssh, winrm, pcp, local
+      For Windows nodes, specify the winrm:// protocol if it has not be configured
+      For SSH, port defaults to '22'
+      For WinRM, port defaults to '5985' or '5986' based on the --[no-]ssl setting
+      For local, use 'local://localhost'
+  query:
+    type: string
+    description: "Query PuppetDB to determine the targets"
+  noop:
+    type: boolean
+    description: "Execute a task that supports it in noop mode"
+  description:
+    type: string
+    description: "Description to use for the job"
+  params:
+    type: string
+    description: "Parameters to a task or plan as json, a json file '@<file>', or on stdin '-'"
+  params_obj:
+    type: object
+    description: "Parameters object that will be translated into JSON. This is used if and only if `params` is NOT specified."
+  user:
+    type: string
+    description: "User to authenticate as"
+  password:
+    type: string
+    description: "Password to authenticate with. Omit the value to prompt for the password."
+    secret: true
+  private_key:
+    type: string
+    description: "Private ssh key to authenticate with"
+  host_key_check:
+    type: boolean
+    description: "Check host keys with SSH"
+  ssl:
+    type: boolean
+    description: "Use SSL with WinRM"
+  ssl_verify:
+    type: boolean
+    description: "Verify remote host SSL certificate with WinRM"
+  run_as:
+    type: string
+    description: "User to run as using privilege escalation"
+  sudo_password:
+    type: string
+    description: "Password for privilege escalation. Omit the value to prompt for the password."
+    secret: true
+  concurrency:
+    type: integer
+    description: "Maximum number of simultaneous connections (default: 100)"
+  compile_concurrency:
+    type: integer
+    description: "Maximum number of simultaneous manifest block compiles (default: number of cores)"
+  modulepath:
+    type: string
+    description: "List of directories containing modules, separated by ':'"
+  boltdir:
+    type: string
+    description: "Specify what Boltdir to load config from (default: autodiscovered from current working dir)"
+  configfile:
+    type: string
+    description: "Specify where to load config from (default: ~/.puppetlabs/bolt/bolt.yaml)"
+  inventoryfile:
+    type: string
+    description: "Specify where to load inventory from (default: ~/.puppetlabs/bolt/inventory.yaml)"
+  transport:
+    type: string
+    description: "Specify a default transport: ssh, winrm, pcp, local"
+  connect_timeout:
+    type: integer
+    description: "Connection timeout (defaults vary)"
+  tty:
+    type: boolean
+    description: "Request a pseudo TTY on nodes that support it"
+  tmpdir:
+    type: string
+    description: "The directory to upload and execute temporary files on the target"
+  format:
+    type: string
+    description: "Output format to use: human or json"
+    default: "json"
+  verbose:
+    type: string
+    description: "Display verbose logging"
+  _debug:
+    type: string
+    description: "Display debug logging"
+  trace:
+    type: string
+    description: "Display error stack traces"
