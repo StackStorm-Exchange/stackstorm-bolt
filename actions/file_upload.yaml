@@ -32,11 +32,9 @@ parameters:
   cwd:
     type: string
     description: "Current working directory where bolt will be executed"
-    default: "{{ config_context.cwd }}"
   env:
     type: object
     description: "Environment variables to override when executing bolt"
-    default: "{{ config_context.env }}"
   credentials:
     type: string
     description: "Name of the credentials object to use from the config"
@@ -44,7 +42,6 @@ parameters:
   cmd:
     type: string
     description: "Path to the bolt executable"
-    default: "{{ config_context.cmd }}"
   nodes:
     type: string
     description: >
@@ -86,15 +83,12 @@ parameters:
   host_key_check:
     type: boolean
     description: "Check host keys with SSH"
-    default: "{{ config_context.host_key_check }}"
   ssl:
     type: boolean
     description: "Use SSL with WinRM"
-    default: "{{ config_context.ssl }}"
   ssl_verify:
     type: boolean
     description: "Verify remote host SSL certificate with WinRM"
-    default: "{{ config_context.ssl_verify }}"
   run_as:
     type: string
     description: "User to run as using privilege escalation"
@@ -105,56 +99,42 @@ parameters:
   concurrency:
     type: integer
     description: "Maximum number of simultaneous connections (default: 100)"
-    default: "{{ config_context.concurrency }}"
   compile_concurrency:
     type: integer
     description: "Maximum number of simultaneous manifest block compiles (default: number of cores)"
-    default: "{{ config_context.compile_concurrency }}"
   modulepath:
     type: string
     description: "List of directories containing modules, separated by ':'"
-    default: "{{ config_context.modulepath }}"
   boltdir:
     type: string
     description: "Specify what Boltdir to load config from (default: autodiscovered from current working dir)"
-    default: "{{ config_context.boltdir }}"
   configfile:
     type: string
     description: "Specify where to load config from (default: ~/.puppetlabs/bolt/bolt.yaml)"
-    default: "{{ config_context.configfile }}"
   inventoryfile:
     type: string
     description: "Specify where to load inventory from (default: ~/.puppetlabs/bolt/inventory.yaml)"
-    default: "{{ config_context.inventoryfile }}"
   transport:
     type: string
     description: "Specify a default transport: ssh, winrm, pcp, local"
-    default: "{{ config_context.transport }}"
   connect_timeout:
     type: integer
     description: "Connection timeout (defaults vary)"
-    default: "{{ config_context.connect_timeout }}"
   tty:
     type: boolean
     description: "Request a pseudo TTY on nodes that support it"
-    default: "{{ config_context.tty }}"
   tmpdir:
     type: string
     description: "The directory to upload and execute temporary files on the target"
-    default: "{{ config_context.tmpdir }}"
   format:
     type: string
     description: "Output format to use: human or json"
-    default: "{{ config_context.format }}"
   verbose:
     type: boolean
     description: "Display verbose logging"
-    default: "{{ config_context.verbose }}"
   debug_:
     type: boolean
     description: "Display debug logging"
-    default: "{{ config_context.debug_ }}"
   trace:
     type: boolean
     description: "Display error stack traces"
-    default: "{{ config_context.trace }}"

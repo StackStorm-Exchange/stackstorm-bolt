@@ -54,13 +54,29 @@ BOLT_OPTIONS = [
 
 class BoltAction(Action):
 
-    def parse_credentials(self, **kwargs):
+    def resolve_config(self, **kwargs):
+        for k, v in six.iteritems(self.config):
+            # skip if we're looking a the `credentials` options
+            if k in CREDENTIALS_OPTIONS:
+                continue
+
+            # skip if the user explicitly set this proper on the action
+            if kwargs[k]:
+                continue
+
+            # only set the property if the value is set in the config
+            if v is not None:
+                kwargs[k] = v
+
+        return kwargs
+
+    def resolve_credentials(self, **kwargs):
         cred_name = kwargs.get('credentials')
         if cred_name not in self.config['credentials']:
             raise ValueError('Unable to find credentials in config: {}'.format(cred_name))
 
         credentials = self.config['credentials'][cred_name]
-        for k, v in credentials:
+        for k, v in six.iteritems(credentials):
             # skip if the user explicitly set this proper on the action
             if kwargs[k]:
                 continue
@@ -137,13 +153,15 @@ class BoltAction(Action):
         return (success, stdout)
 
     def run(self, **kwargs):
+        kwargs = self.resolve_config(**kwargs)
+        kwargs = self.resolve_credentials(**kwargs)
+
         cmd = kwargs['cmd']
         sub_command = kwargs['sub_command']
         env = os.environ.copy()
         env.update(kwargs.get('env', {}))
         cwd = kwargs.get('cwd', None)
 
-        kwargs = self.parse_credentials(**kwargs)
 
         args, options = self.build_args(**kwargs)
         return self.execute(cmd, sub_command, env, cwd, args, options)
