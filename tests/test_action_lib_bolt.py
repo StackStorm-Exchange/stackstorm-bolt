@@ -1,6 +1,5 @@
 from bolt_base_action_test_case import BoltBaseActionTestCase
 from lib.bolt import BoltAction
-from mock import patch
 from st2common.runners.base_action import Action
 
 import mock
@@ -447,13 +446,11 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                             params_obj={"input": "some data"},
                             plan='st2::deploy')
 
-
         self.assertEquals(result, (True, {'mydata': 'xxx'}))
         mock_execute.assert_called_with('/opt/puppetlabs/bin/bolt',
                                         'plan run',
                                         ['--params', '{"input": "some data"}',
-                                         '--private-key', '/home/stanley/.ssh/id_rsa'
-                                        ],
+                                         '--private-key', '/home/stanley/.ssh/id_rsa'],
                                         ['st2::deploy'],
                                         {'BOLT_TEST': 'Data',
                                          'INHERITED': 'true'},
