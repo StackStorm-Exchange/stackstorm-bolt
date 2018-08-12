@@ -18,7 +18,7 @@ SKIP_ARGS = [
 ]
 
 # options for login credentials
-CREDENTIALS_OPTIONS = [
+BOLT_CREDENTIALS_OPTIONS = [
     'user',
     'password',
     'private_key',
@@ -49,7 +49,6 @@ BOLT_OPTIONS = [
     'query',
     'description',
     'params',
-    'params_obj',
     'concurrency',
     'compile_concurrency',
     'modulepath',
@@ -68,11 +67,11 @@ class BoltAction(Action):
     def resolve_config(self, **kwargs):
         for k, v in six.iteritems(self.config):
             # skip if we're looking a the `credentials` options
-            if k in CREDENTIALS_OPTIONS:
+            if k in BOLT_CREDENTIALS_OPTIONS:
                 continue
 
-            # skip if the user explicitly set this proper on the action
-            if kwargs[k] is not None:
+            # skip if the user explicitly set this parameter when invoking the action
+            if kwargs.get(k) is not None:
                 continue
 
             # only set the property if the value is set in the config
@@ -82,23 +81,30 @@ class BoltAction(Action):
         return kwargs
 
     def resolve_credentials(self, **kwargs):
+        """ Lookup credentials, by name, specified by the 'credentials' parameter
+        during action invocation from the credentials dict stored in the config
+        """
+        # if there are no credentials specified in the config, we have nothing to lookup
         if not self.config.get('credentials'):
             return kwargs
 
+        # get the name of credentials asked for during action invocation
         cred_name = kwargs.get('credentials')
         if not cred_name:
             return kwargs
 
+        # if we couldn't find the credential in the config (by name), then raise an error
         if cred_name not in self.config['credentials']:
             raise ValueError('Unable to find credentials in config: {}'.format(cred_name))
 
+        # lookup the credential by name
         credentials = self.config['credentials'][cred_name]
         for k, v in six.iteritems(credentials):
-            # skip if the user explicitly set this proper on the action
-            if kwargs[k] is not None:
+            # skip if the user explicitly set this property during action invocation
+            if kwargs.get(k) is not None:
                 continue
 
-            # only set the property if the value in the credential is set
+            # only set the property if the value in the credential object is set
             if v is not None:
                 kwargs[k] = v
 
@@ -110,9 +116,9 @@ class BoltAction(Action):
             option = option[:-1]
         return option.replace('_', '-')
 
-    def build_args(self, **kwargs):
-        args = []
+    def build_options_args(self, **kwargs):
         options = []
+        args = []
 
         # hack to make sure src comes before dest
         if 'src' in kwargs:
@@ -122,7 +128,15 @@ class BoltAction(Action):
             args.append(kwargs['dest'])
             del kwargs['dest']
 
-        for k, v in six.iteritems(kwargs):
+        # if params_obj is sepcified, convert it into JSON
+        # only do this if 'params' was not specified ('params' overrides 'params_obj')
+        if 'params_obj' in kwargs:
+            if 'params' not in kwargs:
+                kwargs['params'] = json.dumps(kwargs['params_obj'])
+            del kwargs['params_obj']
+
+        # parse all remaining arguments and options
+        for k, v in sorted(six.iteritems(kwargs)):
             if k in SKIP_ARGS:
                 continue
             if v is None:
@@ -138,15 +152,16 @@ class BoltAction(Action):
                     options.append('--{}'.format(k_formatted))
                 else:
                     options.append('--no-{}'.format(k_formatted))
-            elif k in BOLT_OPTIONS:
+            elif k in BOLT_OPTIONS or k in BOLT_CREDENTIALS_OPTIONS:
                 options.append('--{}'.format(k_formatted))
                 options.append(v)
             else:
+                # assume it's an argument since it wasn't any of the options above
                 args.append(v)
-        return args, options
+        return options, args
 
-    def execute(self, cmd, sub_command, env, cwd, args, options):
-        full_cmd = [cmd] + sub_command.split(' ') + args + options
+    def execute(self, cmd, sub_command, options, args, env, cwd):
+        full_cmd = [cmd] + sub_command.split(' ') + options + args
         # self.logger.debug(' '.join(full_cmd))
         process = subprocess.Popen(full_cmd,
                                    stdout=subprocess.PIPE,
@@ -161,10 +176,6 @@ class BoltAction(Action):
                 self.logger.exception(e)
 
         if stderr:
-            try:
-                stderr = json.loads(stderr)
-            except:
-                pass
             sys.stderr.write(stderr)
 
         return_code = process.poll()
@@ -183,5 +194,5 @@ class BoltAction(Action):
         env.update(kwargs.get('env', {}))
         cwd = kwargs.get('cwd', None)
 
-        args, options = self.build_args(**kwargs)
-        return self.execute(cmd, sub_command, env, cwd, args, options)
+        options, args = self.build_options_args(**kwargs)
+        return self.execute(cmd, sub_command, options, args, env, cwd)
