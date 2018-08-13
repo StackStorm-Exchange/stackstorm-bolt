@@ -3,6 +3,7 @@ name: "command_run"
 action_ref: "bolt.command_run"
 pack: "bolt"
 description: "Run a command remotely"
+enabled: false
 formats:
     - "bolt command run {{ command }} nodes {{ nodes }}"
 result:

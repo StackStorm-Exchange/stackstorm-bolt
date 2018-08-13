@@ -3,6 +3,7 @@ name: "plan_list"
 action_ref: "bolt.plan_list"
 pack: "bolt"
 description: "Show list of available plans"
+enabled: false
 formats:
     - "bolt plan list"
     - "bolt plan show"

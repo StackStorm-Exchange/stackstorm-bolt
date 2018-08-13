@@ -3,6 +3,7 @@ name: "plan_show"
 action_ref: "bolt.plan_show"
 pack: "bolt"
 description: "Show details for plan"
+enabled: false
 formats:
     - "bolt plan show {{ plan }}"
 result:

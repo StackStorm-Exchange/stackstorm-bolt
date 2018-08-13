@@ -3,6 +3,7 @@ name: "task_list"
 action_ref: "bolt.task_list"
 pack: "bolt"
 description: "Show list of available tasks"
+enabled: false
 formats:
     - "bolt task list"
     - "bolt task show"
