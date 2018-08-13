@@ -68,7 +68,7 @@ documentation.
 
 ### Configuration Credentials
 
-Most options in the config are simly key/value pairs, with the exception of `credentials`.
+Most options in the config are simply key/value pairs, with the exception of `credentials`.
 In order to make working with the Bolt pack easier, we've provided a mechanism to
 store credentials in the pack's config. Credentials are stored as a dictionary, sometimes
 called a hash, where the key is the name of the credential and the values are 
@@ -182,7 +182,7 @@ st2 run bolt.file_upload src='/opt/stackstorm/data/myfile.txt' dest='/data' node
 ### Action Example - bolt.install
 
 `bolt.install` installs Bolt on the local StackStorm host, so the rest of the actions
-are able to be executed.
+can be executed.
 
 ``` shell
 st2 run bolt.install
@@ -245,8 +245,8 @@ st2 run bolt.plan_show plan="dns::upgrade"
 `bolt.puppetfile_install` installs modules from the Puppetfile located in the `boltdir`, 
 into the first directory found in `modulepath`.
 
-Example, if my Puppetfile lives in `/custom/data/Pupptefile` and i want to install 
-modules into `/custom/data/modules` i would run:
+Example, if my Puppetfile lives in `/custom/data/Pupptefile` and I want to install 
+modules into `/custom/data/modules` I would run:
 
 ``` shell
 st2 run bolt.puppetfile_install boltdir='/custom/data` modulepath='/custom/data/modules`
@@ -288,9 +288,8 @@ st2 run bolt.task_show task="service::linux"
 ## Aliases
 
 ChatOps aliases are available for a large portion of the `bolt` actions.
-By default these aliases are disabled. Simply editing the files and setting
-`enabled: true`, then performing a `st2ctl reload --register-aliases` will enable
-them.
+By default these aliases are disabled. Editing the alias files and change them to
+`enabled: true`. Then run `st2ctl reload --register-aliases`.
 
 Below is a list of available aliases:
 
