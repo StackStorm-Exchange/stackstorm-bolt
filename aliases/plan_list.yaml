@@ -1,0 +1,13 @@
+---
+name: "plan_list"
+action_ref: "bolt.plan_list"
+pack: "bolt"
+description: "Show list of available plans"
+enabled: false
+formats:
+    - "bolt plan list"
+    - "bolt plan show"
+result:
+    format: |
+        Received the following from bolt plan list:
+        {{ execution.result.result | to_yaml_string }}

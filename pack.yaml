@@ -1,0 +1,13 @@
+---
+ref: bolt
+name: bolt
+description: StackStorm integration pack for Puppet Bolt
+keywords: 
+    - bolt
+    - puppet
+    - remote execution
+    - configuration management
+    - cfg management
+version: 0.1.0
+author: Encore Technologies
+email: code@encore.tech

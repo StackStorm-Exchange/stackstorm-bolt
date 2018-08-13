@@ -1,0 +1,8 @@
+---
+description: "Installs the bolt repo and package on the local host"
+enabled: true
+name: install
+pack: bolt
+runner_type: local-shell-script
+entry_point: install.sh
+parameters: {}

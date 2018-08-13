@@ -1,0 +1,12 @@
+---
+name: "task_run"
+action_ref: "bolt.task_run"
+pack: "bolt"
+description: "Run a Puppet task"
+enabled: false
+formats:
+    - "bolt task run {{ task }} nodes {{ nodes }} params {{ params }}"
+result:
+    format: |
+        Received the following from bolt task run:
+        {{ execution.result.result | to_yaml_string }}

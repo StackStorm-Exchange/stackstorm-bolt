@@ -1,0 +1,12 @@
+---
+name: "plan_show"
+action_ref: "bolt.plan_show"
+pack: "bolt"
+description: "Show details for plan"
+enabled: false
+formats:
+    - "bolt plan show {{ plan }}"
+result:
+    format: |
+        Received the following from bolt plan show:
+        {{ execution.result.result | to_yaml_string }}

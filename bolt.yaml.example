@@ -1,0 +1,18 @@
+---
+concurrency: 200
+modulepath: '/opt/custom/bolt/modules'
+boltdir: '/opt/custom/bolt'
+configfile: /opt/custom/bolt/bolt.yaml'
+inventoryfile: '/opt/custom/bolt/inventory/dev.yaml'
+
+# map of name -> credentials object
+credentials:
+  windows:
+    user: 'first.last@domain.tld'
+    password: 'secretSauce!'
+  linux:
+    user: 'boltuser'
+    password: 'xyz123'
+    private_key: '/opt/custom/bolt/ssh/id_rsa'
+    run_as: 'boltsudo'
+    sudo_password: 'abc456'
