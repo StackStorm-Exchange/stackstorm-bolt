@@ -1,0 +1,87 @@
+---
+### Begin common environment
+cwd:
+  type: string
+  description: "Current working directory where bolt will be executed"
+env:
+  type: object
+  description: "Environment variables to override when executing bolt"
+### Begin common bolt options
+cmd:
+  type: string
+  description: "Path to the bolt executable"
+  default: "/usr/local/bin/bolt"
+host_key_check:
+  type: boolean
+  description: "Check host keys with SSH"
+ssl:
+  type: boolean
+  description: "Use SSL with WinRM"
+ssl_verify:
+  type: boolean
+  description: "Verify remote host SSL certificate with WinRM"
+concurrency:
+  type: integer
+  description: "Maximum number of simultaneous connections (default: 100)"
+compile_concurrency:
+  type: integer
+  description: "Maximum number of simultaneous manifest block compiles (default: number of cores)"
+modulepath:
+  type: string
+  description: "List of directories containing modules, separated by ':'"
+boltdir:
+  type: string
+  description: "Specify what Boltdir to load config from (default: autodiscovered from current working dir)"
+configfile:
+  type: string
+  description: "Specify where to load config from (default: ~/.puppetlabs/bolt/bolt.yaml)"
+inventoryfile:
+  type: string
+  description: "Specify where to load inventory from (default: ~/.puppetlabs/bolt/inventory.yaml)"
+transport:
+  type: string
+  description: "Specify a default transport: ssh, winrm, pcp, local"
+connect_timeout:
+  type: integer
+  description: "Connection timeout (defaults vary)"
+tty:
+  type: boolean
+  description: "Request a pseudo TTY on nodes that support it"
+tmpdir:
+  type: string
+  description: "The directory to upload and execute temporary files on the target"
+format:
+  type: string
+  description: "Output format to use: human or json"
+  default: "json"
+verbose:
+  type: boolean
+  description: "Display verbose logging"
+debug_:
+  type: boolean
+  description: "Display debug logging"
+trace:
+  type: boolean
+  description: "Display error stack traces"
+
+credentials:
+  type: object
+  description: "Mapping of name to an object containing credential information"
+  properties:
+    user:
+      type: string
+      description: "User to authenticate as"
+    password:
+      type: string
+      description: "Password to authenticate with. Omit the value to prompt for the password."
+      secret: true
+    private_key:
+      type: string
+      description: "Private ssh key to authenticate with"
+    run_as:
+      type: string
+      description: "User to run as using privilege escalation"
+    sudo_password:
+      type: string
+      description: "Password for privilege escalation. Omit the value to prompt for the password."
+      secret: true

@@ -1,0 +1,12 @@
+---
+name: "task_show"
+action_ref: "bolt.task_show"
+pack: "bolt"
+description: "Show documentation for task"
+enabled: false
+formats:
+    - "bolt task show {{ task }}"
+result:
+    format: |
+        Received the following from bolt task show:
+        {{ execution.result.result | to_yaml_string }}
