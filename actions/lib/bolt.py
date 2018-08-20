@@ -183,8 +183,10 @@ class BoltAction(Action):
         return (success, stdout)
 
     def run(self, **kwargs):
-        kwargs = self.resolve_config(**kwargs)
+        # resolve credentials first so that creds from the CLI override
+        # credentials in the config
         kwargs = self.resolve_credentials(**kwargs)
+        kwargs = self.resolve_config(**kwargs)
 
         cmd = kwargs['cmd']
         sub_command = kwargs['sub_command']
