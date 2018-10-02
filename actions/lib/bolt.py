@@ -130,8 +130,8 @@ class BoltAction(Action):
 
         # if params_obj is sepcified, convert it into JSON
         # only do this if 'params' was not specified ('params' overrides 'params_obj')
-        if 'params_obj' in kwargs:
-            if 'params' not in kwargs:
+        if kwargs.get('params_obj'):
+            if not kwargs.get('params'):
                 kwargs['params'] = json.dumps(kwargs['params_obj'])
             del kwargs['params_obj']
 
