@@ -455,3 +455,37 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                                         {'BOLT_TEST': 'Data',
                                          'INHERITED': 'true'},
                                         '/opt/stackstorm')
+
+    @mock.patch('lib.bolt.os.environ.copy')
+    @mock.patch('lib.bolt.BoltAction.execute')
+    def test_run_creds_params(self, mock_execute, mock_os_environ_copy):
+        action = self.get_action_instance({'cmd': '/opt/puppetlabs/bin/bolt',
+                                           'credentials':
+                                           {
+                                               'stanley':
+                                               {
+                                                   'private_key': '/home/stanley/.ssh/id_rsa',
+                                               }
+                                           }})
+
+        mock_execute.return_value = (True, {'mydata': 'xxx'})
+        mock_os_environ_copy.return_value = {'INHERITED': 'true'}
+
+        result = action.run(sub_command='plan run',
+                            env={'BOLT_TEST': 'Data'},
+                            cwd='/opt/stackstorm',
+                            params_obj={"input": "some data"},
+                            plan='st2::deploy',
+                            user='cli_user',
+                            password='cli_password')
+
+        self.assertEquals(result, (True, {'mydata': 'xxx'}))
+        mock_execute.assert_called_with('/opt/puppetlabs/bin/bolt',
+                                        'plan run',
+                                        ['--params', '{"input": "some data"}',
+                                         '--password', 'cli_password',
+                                         '--user', 'cli_user'],
+                                        ['st2::deploy'],
+                                        {'BOLT_TEST': 'Data',
+                                         'INHERITED': 'true'},
+                                        '/opt/stackstorm')
