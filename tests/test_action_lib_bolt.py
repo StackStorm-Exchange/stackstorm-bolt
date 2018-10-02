@@ -175,6 +175,21 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         self.assertEquals(args, [])
         self.assertEquals(options, ['--params', '{"test": "value"}'])
 
+    # Test that params_obj get set properly when params is None
+    def test_build_options_args_params_none(self):
+        action = self.get_action_instance({})
+        options, args = action.build_options_args(params_obj={'test': 'value'},
+                                                  params=None)
+        self.assertEquals(args, [])
+        self.assertEquals(options, ['--params', '{"test": "value"}'])
+
+    # Test that params doesn't get overwritten when params_obj is None
+    @mock.patch("lib.bolt.json.dumps")
+    def test_build_options_args_params_obj_none(self, mock_json_dumps):
+        action = self.get_action_instance({})
+        options, args = action.build_options_args(params_obj=None)
+        assert not mock_json_dumps.called
+
     def test_build_options_args_params_overrides_params_obj_json(self):
         action = self.get_action_instance({})
         options, args = action.build_options_args(params_obj={'test': 'value'},
