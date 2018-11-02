@@ -185,6 +185,15 @@ class TestActionLibBolt(BoltBaseActionTestCase):
 
     # Test that params doesn't get overwritten when params_obj is None
     @mock.patch("lib.bolt.json.dumps")
+    def test_build_options_args_params_obj_empty(self, mock_json_dumps):
+        action = self.get_action_instance({})
+        options, args = action.build_options_args(params_obj={})
+        self.assertEquals(args, [])
+        self.assertEquals(options, [])
+        assert not mock_json_dumps.called
+
+    # Test that params doesn't get overwritten when params_obj is None
+    @mock.patch("lib.bolt.json.dumps")
     def test_build_options_args_params_obj_none(self, mock_json_dumps):
         action = self.get_action_instance({})
         options, args = action.build_options_args(params_obj=None)

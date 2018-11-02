@@ -133,6 +133,9 @@ class BoltAction(Action):
         if kwargs.get('params_obj'):
             if not kwargs.get('params'):
                 kwargs['params'] = json.dumps(kwargs['params_obj'])
+
+        # Need to remove if exists to prevent dict from getting passed into the options
+        if "params_obj" in kwargs:
             del kwargs['params_obj']
 
         # parse all remaining arguments and options
