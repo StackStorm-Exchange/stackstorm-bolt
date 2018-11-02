@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.1.3
+
+Fix bug with passing empty params_obj variable
+
 ## v0.1.2
 
 Fix bug with passing params through params_obj variable
