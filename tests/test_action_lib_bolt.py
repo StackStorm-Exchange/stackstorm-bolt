@@ -162,10 +162,10 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         # test that it strips trailing _
         self.assertEquals(action.format_option('x_y_z_'), 'x-y-z')
 
-    def test_build_options_args_src_dst_args(self):
+    def test_build_options_args_src_dest_args(self):
         action = self.get_action_instance({})
         options, args = action.build_options_args(src='local://localhost',
-                                                  dst='ssh://stackstorm.domain.tld')
+                                                  dest='ssh://stackstorm.domain.tld')
         self.assertEquals(args, ['local://localhost', 'ssh://stackstorm.domain.tld'])
         self.assertEquals(options, [])
 
@@ -202,7 +202,7 @@ class TestActionLibBolt(BoltBaseActionTestCase):
     def test_build_options_args_params_overrides_params_obj_json(self):
         action = self.get_action_instance({})
         options, args = action.build_options_args(params_obj={'test': 'value'},
-                                          params='p=xxx')
+                                                  params='p=xxx')
         self.assertEquals(args, [])
         self.assertEquals(options, ['--params', 'p=xxx'])
 
@@ -315,14 +315,14 @@ class TestActionLibBolt(BoltBaseActionTestCase):
             description='description',
             params='params',
             params_obj='params_obj',
-            concurrency='concurrency',
-            compile_concurrency='compile_concurrency',
+            concurrency=12,
+            compile_concurrency=100,
             modulepath='modulepath',
             boltdir='boltdir',
             configfile='configfile',
             inventoryfile='inventoryfile',
             transport='transport',
-            connect_timeout='connect_timeout',
+            connect_timeout=99,
             tmpdir='tmpdir',
             format='format',
             # credentials options
@@ -337,14 +337,14 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         self.assert_remove_option(options, '--query', 'query')
         self.assert_remove_option(options, '--description', 'description')
         self.assert_remove_option(options, '--params', 'params')
-        self.assert_remove_option(options, '--concurrency', 'concurrency')
-        self.assert_remove_option(options, '--compile-concurrency', 'compile_concurrency')
+        self.assert_remove_option(options, '--concurrency', '12')
+        self.assert_remove_option(options, '--compile-concurrency', '100')
         self.assert_remove_option(options, '--modulepath', 'modulepath')
         self.assert_remove_option(options, '--boltdir', 'boltdir')
         self.assert_remove_option(options, '--configfile', 'configfile')
         self.assert_remove_option(options, '--inventoryfile', 'inventoryfile')
         self.assert_remove_option(options, '--transport', 'transport')
-        self.assert_remove_option(options, '--connect-timeout', 'connect_timeout')
+        self.assert_remove_option(options, '--connect-timeout', '99')
         self.assert_remove_option(options, '--tmpdir', 'tmpdir')
         self.assert_remove_option(options, '--format', 'format')
         self.assert_remove_option(options, '--user', 'user')
@@ -352,6 +352,15 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         self.assert_remove_option(options, '--private-key', 'private_key')
         self.assert_remove_option(options, '--run-as', 'run_as')
         self.assert_remove_option(options, '--sudo-password', 'sudo_password')
+        self.assertEquals(options, [])
+
+    def test_build_options_args_ensure_unknown_args_cast_to_strings(self):
+        action = self.get_action_instance({})
+        options, args = action.build_options_args(
+            unknown_bool=True,
+            unknown_int=123,
+        )
+        self.assertEquals(args, ['True', '123'])
         self.assertEquals(options, [])
 
     @mock.patch('lib.bolt.sys')

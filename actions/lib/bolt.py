@@ -157,10 +157,10 @@ class BoltAction(Action):
                     options.append('--no-{}'.format(k_formatted))
             elif k in BOLT_OPTIONS or k in BOLT_CREDENTIALS_OPTIONS:
                 options.append('--{}'.format(k_formatted))
-                options.append(v)
+                options.append(str(v))
             else:
                 # assume it's an argument since it wasn't any of the options above
-                args.append(v)
+                args.append(str(v))
         return options, args
 
     def execute(self, cmd, sub_command, options, args, env, cwd):
