@@ -47,6 +47,7 @@ documentation.
 * `tty` - Request a pseudo TTY on nodes that support it
 * `tmpdir` - The directory to upload and execute temporary files on the target
 * `format` - Output format to use: human or json [default = `json`]
+* `color` - Whether to show output in color
 * `verbose` - Display verbose logging
 * `debug_` - Display debug logging
 * `trace` - Display error stack traces
@@ -145,6 +146,7 @@ CLI command.
 
 Below is a list of currently available actions:
 
+* `bolt.apply` - Apply Puppet manifest code.
 * `bolt.command_run` - Runs a command remotely.
 * `bolt.file_upload` - Upload local file `src` to `dest` on each node.
 * `bolt.install` - Installs Bolt on the StackStorm node.
@@ -152,11 +154,22 @@ Below is a list of currently available actions:
 * `bolt.plan_run` - Run a Puppet task plan.
 * `bolt.plan_show` - Show details for plan.
 * `bolt.puppetfile_install` - Install modules from a Puppetfile into a Boltdir.
+* `bolt.puppetfile_show_modules` - List modules available to Bolt
 * `bolt.script_run` - Upload a local script and run it remotely.
 * `bolt.task_list` - Show list of available tasks.
 * `bolt.task_run` - Run a Puppet task.
 * `bolt.task_show` - Show documentation for task.
 
+
+### Action Example - bolt.apply
+
+`bolt.apply` is used to apply a Puppet manifest file on remote hosts using the Puppet agent.
+The `manifest` parameter is the path to the manifest file on the StackStorm host that will
+be uploaded to the remote nodes and applied with the Puppet agent.
+
+``` shell
+st2 run bolt.apply manifest="/etc/puppetlabs/code/test.pp" nodes=host1.domain.tld
+```
 
 ### Action Example - bolt.command_run
 
@@ -252,6 +265,14 @@ modules into `/custom/data/modules` I would run:
 st2 run bolt.puppetfile_install boltdir='/custom/data` modulepath='/custom/data/modules`
 ```
 
+### Action Example - bolt.puppetfile_show_modules
+
+`bolt.puppetfile_show_modules` shows all of the available Puppet modules in Bolt's `modulepath`.
+
+``` shell
+st2 run bolt.puppetfile_show_modules modulepath='/custom/data/modules`
+```
+
 ### Action Example - bolt.script_run
 
 `bolt.script_run` uploads a local script, specified by the `script` paramter, from the
@@ -283,6 +304,14 @@ st2 run bolt.task_run task="service::linux" params='name=rsyslog action=restart'
 
 ``` shell
 st2 run bolt.task_show task="service::linux"
+```
+
+### Action Example - bolt.version
+
+`bolt.version` returns the version of Bolt installed on the StackStorm node.
+
+``` shell
+st2 run bolt.version"
 ```
 
 ## Aliases

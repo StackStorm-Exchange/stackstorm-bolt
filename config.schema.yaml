@@ -50,6 +50,10 @@ tty:
 tmpdir:
   type: string
   description: "The directory to upload and execute temporary files on the target"
+color:
+  type: boolean
+  description: "Whether to show output in color"
+  default: false
 format:
   type: string
   description: "Output format to use: human or json"

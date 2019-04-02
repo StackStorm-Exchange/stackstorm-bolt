@@ -1,7 +1,7 @@
 ---
-description: "Install modules from a Puppetfile into a Boltdir"
+description: "Apply Puppet manifest code."
 enabled: true
-name: puppetfile_install
+name: apply
 pack: bolt
 runner_type: python-script
 entry_point: lib/bolt.py
@@ -9,7 +9,11 @@ parameters:
   sub_command:
     type: string
     immutable: true
-    default: "puppetfile install"
+    default: "apply"
+  manifest:
+    type: string
+    description: "Path to a manifest file (.pp) to upload and apply on a set of nodes"
+    required: true
   ### Begin common environment
   cwd:
     type: string
