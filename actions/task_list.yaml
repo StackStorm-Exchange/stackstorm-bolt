@@ -111,6 +111,9 @@ parameters:
   format:
     type: string
     description: "Output format to use: human or json"
+  color:
+    type: boolean
+    description: "Whether to show output in color"
   verbose:
     type: boolean
     description: "Display verbose logging"
