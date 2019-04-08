@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.2.1
+
+* Fix bug where non-string parameters such as `connection_timeout` and `concurrency` were
+  causing errors when running the `bolt` command. Non-string parameters will now be
+  cast to a string so that the command invocation library can handle them properly.
+  
+  Contributed by Nick Maludy (Encore Technologies).
+
 ## v0.2.0
 
 * Add `color` as an option for this pack's config and a parameter to all actions.
