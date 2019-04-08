@@ -163,16 +163,18 @@ class BoltAction(Action):
                 args.append(str(v))
         return options, args
 
-    def execute(self, cmd, sub_command, options, args, env, cwd):
+    def execute(self, cmd, sub_command, options, args, env, cwd, format):
         full_cmd = [cmd] + sub_command.split(' ') + options + args
-        # self.logger.debug(' '.join(full_cmd))
         process = subprocess.Popen(full_cmd,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
                                    env=env,
                                    cwd=cwd)
         stdout, stderr = process.communicate()
-        if stdout:
+        # only try to parse JSON when the requested output format is JSON
+        # if it's 'human' format, then skip JSON parsing to avoid the unecessary
+        # exceptions
+        if stdout and format == 'json':
             try:
                 stdout = json.loads(stdout)
             except Exception as e:
@@ -193,6 +195,7 @@ class BoltAction(Action):
 
         cmd = kwargs['cmd']
         sub_command = kwargs['sub_command']
+        format = kwargs['format']
         # inherit from OS environment by default
         env = os.environ.copy()
         # merge in any environment variables set as action arguments
@@ -200,4 +203,4 @@ class BoltAction(Action):
         cwd = kwargs.get('cwd', None)
 
         options, args = self.build_options_args(**kwargs)
-        return self.execute(cmd, sub_command, options, args, env, cwd)
+        return self.execute(cmd, sub_command, options, args, env, cwd, format)

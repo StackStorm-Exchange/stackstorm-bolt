@@ -1,12 +1,29 @@
 # Change Log
 
-## v0.1.4
+## v0.2.1
 
 * Fix bug where non-string parameters such as `connection_timeout` and `concurrency` were
   causing errors when running the `bolt` command. Non-string parameters will now be
   cast to a string so that the command invocation library can handle them properly.
   
   Contributed by Nick Maludy (Encore Technologies).
+
+## v0.2.0
+
+* Add `color` as an option for this pack's config and a parameter to all actions.
+  By default, color output is `false` (disabled) to make it easier to parse Bolt's output.
+  This can be changed globally in the pack's config, or on any individual action when
+  invoking it.
+  
+* Previously, this pack would always try to parse the `stdout` of every Bolt run as if it
+  had JSON data in it. This caused false exceptions when the user passed in `format='human'`.
+  This pack now skips JSON parsing of `stdout` if `format='human'`.
+  
+* Added a new action `bolt.apply` that applies a Puppet manifest file (`.pp`) on a set of nodes.
+
+* Added a new action `bolt.puppetfile_show_modules` that lists all modules available to Bolt.
+
+* Added a new action `bolt.version` that returns the version of Bolt that is installed.
 
 ## v0.1.3
 

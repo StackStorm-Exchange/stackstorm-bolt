@@ -1,7 +1,7 @@
 ---
-description: "Install modules from a Puppetfile into a Boltdir"
+description: "List the version of Bolt installed."
 enabled: true
-name: puppetfile_install
+name: version
 pack: bolt
 runner_type: python-script
 entry_point: lib/bolt.py
@@ -9,7 +9,7 @@ parameters:
   sub_command:
     type: string
     immutable: true
-    default: "puppetfile install"
+    default: "--version"
   ### Begin common environment
   cwd:
     type: string
@@ -111,6 +111,7 @@ parameters:
   format:
     type: string
     description: "Output format to use: human or json"
+    default: "human"
   color:
     type: boolean
     description: "Whether to show output in color"

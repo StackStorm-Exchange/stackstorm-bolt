@@ -379,7 +379,8 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                                 ['--verbose'],
                                 ['data=something'],
                                 {'BOLT_TEST': 'Value'},
-                                '/opt/stackstorm')
+                                '/opt/stackstorm',
+                                'json')
 
         self.assertEquals(result, (True, {"stdout": "value"}))
         mock_popen.assert_called_with(['/opt/puppetlabs/bin/bolt',
@@ -410,7 +411,8 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                                 ['--verbose'],
                                 ['data=something'],
                                 {'BOLT_TEST': 'Value'},
-                                '/opt/stackstorm')
+                                '/opt/stackstorm',
+                                'json')
 
         self.assertEquals(result, (False, {"stdout": "data"}))
         mock_popen.assert_called_with(['/opt/puppetlabs/bin/bolt',
@@ -441,7 +443,8 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                                 ['--verbose'],
                                 ['data=something'],
                                 {'BOLT_TEST': 'Value'},
-                                '/opt/stackstorm')
+                                '/opt/stackstorm',
+                                'json')
 
         self.assertEquals(result, (True, 'not JSON data'))
         mock_popen.assert_called_with(['/opt/puppetlabs/bin/bolt',
@@ -456,6 +459,39 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         mock_process.communicate.assert_called_with()
         mock_process.poll.assert_called_with()
         self.assertEquals(action.logger.exception.call_count, 1)
+
+    @mock.patch('subprocess.Popen')
+    def test_execute_format_human(self, mock_popen):
+        action = self.get_action_instance({})
+        action.logger = mock.MagicMock()
+
+        mock_process = mock.MagicMock()
+        mock_process.communicate.return_value = ('not JSON data', '')
+        mock_process.poll.return_value = 0
+
+        mock_popen.return_value = mock_process
+
+        result = action.execute('/opt/puppetlabs/bin/bolt',
+                                'plan run',
+                                ['--verbose'],
+                                ['data=something'],
+                                {'BOLT_TEST': 'Value'},
+                                '/opt/stackstorm',
+                                'human')
+
+        self.assertEquals(result, (True, 'not JSON data'))
+        mock_popen.assert_called_with(['/opt/puppetlabs/bin/bolt',
+                                       'plan',
+                                       'run',
+                                       '--verbose',
+                                       'data=something'],
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.PIPE,
+                                      env={'BOLT_TEST': 'Value'},
+                                      cwd='/opt/stackstorm')
+        mock_process.communicate.assert_called_with()
+        mock_process.poll.assert_called_with()
+        self.assertEquals(action.logger.exception.call_count, 0)
 
     @mock.patch('lib.bolt.os.environ.copy')
     @mock.patch('lib.bolt.BoltAction.execute')
@@ -477,17 +513,20 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                             env={'BOLT_TEST': 'Data'},
                             cwd='/opt/stackstorm',
                             params_obj={"input": "some data"},
-                            plan='st2::deploy')
+                            plan='st2::deploy',
+                            format='json')
 
         self.assertEquals(result, (True, {'mydata': 'xxx'}))
         mock_execute.assert_called_with('/opt/puppetlabs/bin/bolt',
                                         'plan run',
-                                        ['--params', '{"input": "some data"}',
+                                        ['--format', 'json',
+                                         '--params', '{"input": "some data"}',
                                          '--private-key', '/home/stanley/.ssh/id_rsa'],
                                         ['st2::deploy'],
                                         {'BOLT_TEST': 'Data',
                                          'INHERITED': 'true'},
-                                        '/opt/stackstorm')
+                                        '/opt/stackstorm',
+                                        'json')
 
     @mock.patch('lib.bolt.os.environ.copy')
     @mock.patch('lib.bolt.BoltAction.execute')
@@ -510,15 +549,18 @@ class TestActionLibBolt(BoltBaseActionTestCase):
                             params_obj={"input": "some data"},
                             plan='st2::deploy',
                             user='cli_user',
-                            password='cli_password')
+                            password='cli_password',
+                            format='human')
 
         self.assertEquals(result, (True, {'mydata': 'xxx'}))
         mock_execute.assert_called_with('/opt/puppetlabs/bin/bolt',
                                         'plan run',
-                                        ['--params', '{"input": "some data"}',
+                                        ['--format', 'human',
+                                         '--params', '{"input": "some data"}',
                                          '--password', 'cli_password',
                                          '--user', 'cli_user'],
                                         ['st2::deploy'],
                                         {'BOLT_TEST': 'Data',
                                          'INHERITED': 'true'},
-                                        '/opt/stackstorm')
+                                        '/opt/stackstorm',
+                                        'human')
