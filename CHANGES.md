@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.2.2
+
+* Updated the pack's icon to be the new, official, Bolt icon.
+
+  Contributed by Nick Maludy (Encore Technologies).
+
 ## v0.2.1
 
 * Fix bug where non-string parameters such as `connection_timeout` and `concurrency` were
