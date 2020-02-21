@@ -19,14 +19,14 @@ st2 run bolt.install
 Ensure Bolt is working by running a command on the localhost:
 
 ``` shell
-st2 run bolt.command_run nodes=local://localhost command="date"
+st2 run bolt.command_run targets=local://localhost command="date"
 ```
 
 ## Configuration
 
 Copy the example configuration in [bolt.yaml.example](./bolt.yaml.example)
 to `/opt/stackstorm/configs/bolt.yaml` and edit as required. These configuration options
-are copied from the Bolt configuration. For more details please see the 
+are copied from the Bolt configuration. For more details please see the
 [Bolt configuration options](https://puppet.com/docs/bolt/0.x/bolt_configuration_options.html)
 documentation.
 
@@ -44,7 +44,7 @@ documentation.
 * `inventoryfile` - Specify where to load inventory from (default: ~/.puppetlabs/bolt/inventory.yaml)
 * `transport` - Specify a default transport: ssh, winrm, pcp, local
 * `connect_timeout` - Connection timeout (defaults vary)
-* `tty` - Request a pseudo TTY on nodes that support it
+* `tty` - Request a pseudo TTY on targets that support it
 * `tmpdir` - The directory to upload and execute temporary files on the target
 * `format` - Output format to use: human or json [default = `json`]
 * `color` - Whether to show output in color
@@ -72,7 +72,7 @@ documentation.
 Most options in the config are simply key/value pairs, with the exception of `credentials`.
 In order to make working with the Bolt pack easier, we've provided a mechanism to
 store credentials in the pack's config. Credentials are stored as a dictionary, sometimes
-called a hash, where the key is the name of the credential and the values are 
+called a hash, where the key is the name of the credential and the values are
 the credential information (username, password, etc).
 
 Below is an example of a simple config with a single credential named `dev`:
@@ -104,7 +104,7 @@ using the `credentials` parameter available on every action. Example:
 
 ``` shell
 # use login information from the "dev" credential stored in the config
-st2 run bolt.command_run nodes="devserver01.domain.tld" command="ls /data" credentials="dev"
+st2 run bolt.command_run targets="devserver01.domain.tld" command="ls /data" credentials="dev"
 ```
 
 ### Configuration Example
@@ -137,7 +137,7 @@ credentials:
 ## Actions
 
 Actions in the Bolt pack mirror the `bolt` CLI where each action represents a different
-CLI command. 
+CLI command.
 
 **Note** Before any actions are executed, `bolt` must be installed on all StackStorm nodes.
          This can be done by Configuration Management such as Puppet, Chef, or Ansible.
@@ -148,7 +148,7 @@ Below is a list of currently available actions:
 
 * `bolt.apply` - Apply Puppet manifest code.
 * `bolt.command_run` - Runs a command remotely.
-* `bolt.file_upload` - Upload local file `src` to `dest` on each node.
+* `bolt.file_upload` - Upload local file `src` to `dest` on each target.
 * `bolt.install` - Installs Bolt on the StackStorm node.
 * `bolt.plan_list` - Show list of available plans.
 * `bolt.plan_run` - Run a Puppet task plan.
@@ -165,10 +165,10 @@ Below is a list of currently available actions:
 
 `bolt.apply` is used to apply a Puppet manifest file on remote hosts using the Puppet agent.
 The `manifest` parameter is the path to the manifest file on the StackStorm host that will
-be uploaded to the remote nodes and applied with the Puppet agent.
+be uploaded to the remote targets and applied with the Puppet agent.
 
 ``` shell
-st2 run bolt.apply manifest="/etc/puppetlabs/code/test.pp" nodes=host1.domain.tld
+st2 run bolt.apply manifest="/etc/puppetlabs/code/test.pp" targets=host1.domain.tld
 ```
 
 ### Action Example - bolt.command_run
@@ -177,19 +177,19 @@ st2 run bolt.apply manifest="/etc/puppetlabs/code/test.pp" nodes=host1.domain.tl
 parameter is a string of what should be executed:
 
 ``` shell
-st2 run bolt.command_run command="ls -l /tmp" nodes=host1.domain.tld
+st2 run bolt.command_run command="ls -l /tmp" targets=host1.domain.tld
 ```
 
 ### Action Example - bolt.file_upload
 
 `bolt.file_upload` uploads a file from the local StackStorm host `src` to a remote location `dst`
-on all nodes specified during execution.
+on all targets specified during execution.
 
 * `src` - Path on the local StackStorm host filesystem of the file to be uploaded.
-* `dest` - Path on the remote nodes where the file should be uploaded to.
+* `dest` - Path on the remote targets where the file should be uploaded to.
 
 ``` shell
-st2 run bolt.file_upload src='/opt/stackstorm/data/myfile.txt' dest='/data' nodes=host1.domain.tld,host2.domain.tld
+st2 run bolt.file_upload src='/opt/stackstorm/data/myfile.txt' dest='/data' targets=host1.domain.tld,host2.domain.tld
 ```
 
 ### Action Example - bolt.install
@@ -218,10 +218,10 @@ specified in `parameter=value` format. For more information please consult
 the [bolt plan documentation](https://puppet.com/docs/bolt/0.x/writing_plans.html#concept-2302).
 
 ``` shell
-st2 run bolt.plan_run nodes="devserver01.domain.tld" plan="dns::upgrade" params="zone=xyz123.domain.tld. ttl=3200"
+st2 run bolt.plan_run targets="devserver01.domain.tld" plan="dns::upgrade" params="zone=xyz123.domain.tld. ttl=3200"
 ```
 
-Alternatively parameters can be specified in object notation using the `params_obj` 
+Alternatively parameters can be specified in object notation using the `params_obj`
 parameter. This allows native parameter passing within workflow engines such
 as Orquesta, Mistral and ActionChain. On the CLI this parameter takes in a
 JSON formatted string.
@@ -229,7 +229,7 @@ JSON formatted string.
 CLI example (JSON string):
 
 ``` shell
-st2 run bolt.plan_run nodes="devserver01.domain.tld" plan="dns::upgrade" params_obj='{"zone": "xyz123.domain.tld",  "ttl": 3200}'
+st2 run bolt.plan_run targets="devserver01.domain.tld" plan="dns::upgrade" params_obj='{"zone": "xyz123.domain.tld",  "ttl": 3200}'
 ```
 
 Orquesta example (YAML object notation):
@@ -239,7 +239,7 @@ Orquesta example (YAML object notation):
     action: bolt.plan_run
     input:
       plan: "dns::upgrade"
-      nodes: "devserver01.domain.tld"
+      targets: "devserver01.domain.tld"
       params_obj:
         zone: "xyz123.domain.tld"
         ttl: 3200
@@ -255,10 +255,10 @@ st2 run bolt.plan_show plan="dns::upgrade"
 
 ### Action Example - bolt.puppetfile_install
 
-`bolt.puppetfile_install` installs modules from the Puppetfile located in the `boltdir`, 
+`bolt.puppetfile_install` installs modules from the Puppetfile located in the `boltdir`,
 into the first directory found in `modulepath`.
 
-Example, if my Puppetfile lives in `/custom/data/Pupptefile` and I want to install 
+Example, if my Puppetfile lives in `/custom/data/Pupptefile` and I want to install
 modules into `/custom/data/modules` I would run:
 
 ``` shell
@@ -279,7 +279,7 @@ st2 run bolt.puppetfile_show_modules modulepath='/custom/data/modules`
 StackStorm node and run it remotely.
 
 ``` shell
-st2 run bolt.script_run script=/opt/stackstorm/scripts/test.sh nodes=host1.domain.tld,host2.domain.tld
+st2 run bolt.script_run script=/opt/stackstorm/scripts/test.sh targets=host1.domain.tld,host2.domain.tld
 ```
 
 ### Action Example - bolt.task_list
@@ -298,7 +298,7 @@ st2 run bolt.task_list
 st2 run bolt.task_run task="service::linux" params='name=rsyslog action=restart'
 ```
 
-### Action Example - bolt.task_show 
+### Action Example - bolt.task_show
 
 `bolt.task_show` returns documentation for a task in bolt's `modulepath`.
 
