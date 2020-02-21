@@ -5,7 +5,7 @@ pack: "bolt"
 description: "Run a command remotely"
 enabled: false
 formats:
-    - "bolt command run {{ command }} nodes {{ nodes }}"
+    - "bolt command run {{ command }} targets {{ targets }}"
 result:
     format: |
         Received the following from bolt command run:
