@@ -46,7 +46,7 @@ connect_timeout:
   description: "Connection timeout (defaults vary)"
 tty:
   type: boolean
-  description: "Request a pseudo TTY on nodes that support it"
+  description: "Request a pseudo TTY on targets that support it"
 tmpdir:
   type: string
   description: "The directory to upload and execute temporary files on the target"

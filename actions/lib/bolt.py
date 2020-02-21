@@ -45,7 +45,7 @@ BOLT_YES_NO_OPTIONS = [
 
 # --option OPTION
 BOLT_OPTIONS = [
-    'nodes',
+    'targets',
     'query',
     'description',
     'params',

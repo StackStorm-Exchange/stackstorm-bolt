@@ -5,7 +5,7 @@ pack: "bolt"
 description: "Run a Puppet task"
 enabled: false
 formats:
-    - "bolt task run {{ task }} nodes {{ nodes }} params {{ params }}"
+    - "bolt task run {{ task }} targets {{ targets }} params {{ params }}"
 result:
     format: |
         Received the following from bolt task run:

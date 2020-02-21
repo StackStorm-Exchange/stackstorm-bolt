@@ -310,7 +310,7 @@ class TestActionLibBolt(BoltBaseActionTestCase):
     def test_build_options_args_options(self):
         action = self.get_action_instance({})
         options, args = action.build_options_args(
-            nodes='nodes',
+            targets='targets',
             query='query',
             description='description',
             params='params',
@@ -333,7 +333,7 @@ class TestActionLibBolt(BoltBaseActionTestCase):
             sudo_password='sudo_password',
         )
         self.assertEquals(args, [])
-        self.assert_remove_option(options, '--nodes', 'nodes')
+        self.assert_remove_option(options, '--targets', 'targets')
         self.assert_remove_option(options, '--query', 'query')
         self.assert_remove_option(options, '--description', 'description')
         self.assert_remove_option(options, '--params', 'params')
