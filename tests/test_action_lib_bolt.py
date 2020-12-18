@@ -319,6 +319,7 @@ class TestActionLibBolt(BoltBaseActionTestCase):
             compile_concurrency=100,
             modulepath='modulepath',
             boltdir='boltdir',
+            project='project',
             configfile='configfile',
             inventoryfile='inventoryfile',
             transport='transport',
@@ -341,6 +342,7 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         self.assert_remove_option(options, '--compile-concurrency', '100')
         self.assert_remove_option(options, '--modulepath', 'modulepath')
         self.assert_remove_option(options, '--boltdir', 'boltdir')
+        self.assert_remove_option(options, '--project', 'project')
         self.assert_remove_option(options, '--configfile', 'configfile')
         self.assert_remove_option(options, '--inventoryfile', 'inventoryfile')
         self.assert_remove_option(options, '--transport', 'transport')
