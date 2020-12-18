@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.1.0
+
+* Added new `project` option that replaces `boltdir`.
+
+  Contributed by Nick Maludy (Encore Technologies).
+
 ## v1.0.0
 
 * Changed pack to use 'targets' instead of 'nodes' for all bolt commands as 'nodes' is deprecated.
