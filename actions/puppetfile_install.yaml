@@ -89,7 +89,10 @@ parameters:
     description: "List of directories containing modules, separated by ':'"
   boltdir:
     type: string
-    description: "Specify what Boltdir to load config from (default: autodiscovered from current working dir)"
+    description: "Deprecated, switch to 'project'. Specify what project to load config from (default: autodiscovered from current working dir)"
+  project:
+    type: string
+    description: "Path to load the Bolt project from (default: autodiscovered from current dir)"
   configfile:
     type: string
     description: "Specify where to load config from (default: ~/.puppetlabs/bolt/bolt.yaml)"
