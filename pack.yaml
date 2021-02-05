@@ -8,9 +8,8 @@ keywords:
   - remote execution
   - configuration management
   - cfg management
-version: 1.0.0
+version: 2.0.0
 author: Encore Technologies
 email: code@encore.tech
 python_versions:
-  - "2"
   - "3"

@@ -1,5 +1,9 @@
 # Change Log
 
+## v2.0.0
+
+* Drop Python 2.7 support
+
 ## v1.0.0
 
 * Changed pack to use 'targets' instead of 'nodes' for all bolt commands as 'nodes' is deprecated.
