@@ -1,10 +1,14 @@
 # Change Log
 
-## v1.1.0
+## v2.1.0
 
 * Added new `project` option that replaces `boltdir`.
 
   Contributed by Nick Maludy (Encore Technologies).
+
+## v2.0.0
+
+* Drop Python 2.7 support
 
 ## v1.0.0
 
