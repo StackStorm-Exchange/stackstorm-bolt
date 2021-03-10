@@ -53,6 +53,7 @@ BOLT_OPTIONS = [
     'compile_concurrency',
     'modulepath',
     'boltdir',
+    'project',
     'configfile',
     'inventoryfile',
     'transport',
