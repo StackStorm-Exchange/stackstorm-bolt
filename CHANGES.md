@@ -1,5 +1,11 @@
 # Change Log
 
+## v2.2.0
+
+* Added Python 3 fix for converting byte strings.
+
+  Contributed by Bradley Bishop (Encore Technologies).
+
 ## v2.1.0
 
 * Added new `project` option that replaces `boltdir`.
