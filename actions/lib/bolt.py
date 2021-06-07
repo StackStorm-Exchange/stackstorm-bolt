@@ -164,7 +164,6 @@ class BoltAction(Action):
                 args.append(str(v))
         return options, args
 
-
     def check_byte_strig(self, string):
         if isinstance(string, bytes):
             string = string.decode("utf-8")
