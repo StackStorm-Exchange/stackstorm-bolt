@@ -164,7 +164,7 @@ class BoltAction(Action):
                 args.append(str(v))
         return options, args
 
-    def check_byte_strig(self, string):
+    def check_byte_string(self, string):
         if isinstance(string, bytes):
             string = string.decode("utf-8")
 
@@ -178,8 +178,8 @@ class BoltAction(Action):
                                    env=env,
                                    cwd=cwd)
         stdout, stderr = process.communicate()
-        stdout = self.check_byte_strig(stdout)
-        stderr = self.check_byte_strig(stderr)
+        stdout = self.check_byte_string(stdout)
+        stderr = self.check_byte_string(stderr)
         # only try to parse JSON when the requested output format is JSON
         # if it's 'human' format, then skip JSON parsing to avoid the unecessary
         # exceptions

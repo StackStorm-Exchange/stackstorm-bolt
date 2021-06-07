@@ -365,6 +365,16 @@ class TestActionLibBolt(BoltBaseActionTestCase):
         self.assertEquals(args, ['True', '123'])
         self.assertEquals(options, [])
 
+    def test_check_byte_string(self):
+        action = self.get_action_instance({})
+        result = action.check_byte_string(b'test')
+        self.assertEquals(result, 'test')
+
+    def test_check_byte_string_no_bytes(self):
+        action = self.get_action_instance({})
+        result = action.check_byte_string('test')
+        self.assertEquals(result, 'test')
+
     @mock.patch('lib.bolt.sys')
     @mock.patch('subprocess.Popen')
     def test_execute(self, mock_popen, mock_sys):
