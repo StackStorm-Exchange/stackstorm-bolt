@@ -164,6 +164,12 @@ class BoltAction(Action):
                 args.append(str(v))
         return options, args
 
+    def check_byte_string(self, string):
+        if isinstance(string, bytes):
+            string = string.decode("utf-8")
+
+        return string
+
     def execute(self, cmd, sub_command, options, args, env, cwd, format):
         full_cmd = [cmd] + sub_command.split(' ') + options + args
         process = subprocess.Popen(full_cmd,
@@ -172,6 +178,8 @@ class BoltAction(Action):
                                    env=env,
                                    cwd=cwd)
         stdout, stderr = process.communicate()
+        stdout = self.check_byte_string(stdout)
+        stderr = self.check_byte_string(stderr)
         # only try to parse JSON when the requested output format is JSON
         # if it's 'human' format, then skip JSON parsing to avoid the unecessary
         # exceptions
