@@ -1,5 +1,11 @@
 # Change Log
 
+## v2.2.1
+
+* Switches stackstorm-ci url to an ssh url
+
+  Contributed by Alex Chrystal (Encore Technologies).
+
 ## v2.2.0
 
 * Added Python 3 fix for converting byte strings.
