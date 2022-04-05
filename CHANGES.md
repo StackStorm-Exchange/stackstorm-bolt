@@ -1,5 +1,11 @@
 # Change Log
 
+## v2.3.0
+
+* Switching to GH actions
+
+  Contributed by Alex Chrystal (Encore Technologies).
+
 ## v2.2.1
 
 * Switches stackstorm-ci url to an ssh url
