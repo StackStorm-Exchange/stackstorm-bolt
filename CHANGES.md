@@ -4,7 +4,7 @@
 
 * Switching to GH actions
 
-  Contributed by Alex Chrystal (Encore Technologies).
+  Contributed by Bradley Bishop (Encore Technologies).
 
 ## v2.2.1
 
